@@ -1,4 +1,4 @@
-# jogo_proj
+# Mini Space Invaders
 
 A game written in Go for the [WASM-4](https://wasm4.org) fantasy console.
 
