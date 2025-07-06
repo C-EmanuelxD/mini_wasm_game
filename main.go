@@ -150,30 +150,3 @@ func tela(){
 func colisao(x1, y1, w1, h1, x2, y2, w2, h2 int) bool{
 	return x1 < x2+w2 && x1+w1 > x2 && y1 < y2+h2 && y1+h1 > y2
 }
-
-func itoa(n int) string {
-	if n == 0 {
-		return "0"
-	}
-
-	var buf [12]byte // Suporta até int32 mínimo (-2147483648)
-	i := len(buf)
-
-	neg := n < 0
-	if neg {
-		n = -n
-	}
-
-	for n > 0 {
-		i--
-		buf[i] = byte('0' + n%10)
-		n /= 10
-	}
-
-	if neg {
-		i--
-		buf[i] = '-'
-	}
-
-	return string(buf[i:])
-}
