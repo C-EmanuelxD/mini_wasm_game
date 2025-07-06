@@ -64,12 +64,12 @@ func update() {
 
 
 	if gamepad & w4.BUTTON_RIGHT != 0{
-		if naveX <= 151{ //while navex >= 159
+		if naveX <= 150{ //while navex >= 159
 			naveX += 2
 		}
 	}
 	if gamepad & w4.BUTTON_LEFT != 0{
-		if naveX >= 1{
+		if naveX >= 2{
 			naveX -= 2
 		}
 		
