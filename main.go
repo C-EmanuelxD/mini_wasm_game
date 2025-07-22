@@ -37,12 +37,15 @@ var tiros = make([]projetil, 10)
 var delayTiro int
 var jogoIniciado bool
 
-var viloes = [3]entidade{
+var viloes = [6]entidade{
 	{vida: 3, vivo: true, x: 10, y: 10},
-	{vida: 3, vivo: true, x: 79, y: 10},
-	{vida: 3, vivo: true, x: 150, y: 10},
+	{vida: 3, vivo: true, x: 40, y: 10},
+	{vida: 3, vivo: true, x: 70, y: 10},
+	{vida: 3, vivo: true, x: 100, y: 10},
+	{vida: 3, vivo: true, x: 130, y: 10},
+	{vida: 3, vivo: true, x: 160, y: 10},
 }
-var direcaoVilao = [3]bool{false, true, false}
+var direcaoVilao = [6]bool{false, true, false, true, false, true}
 
 //go:export update
 func update() {
@@ -59,11 +62,12 @@ func update() {
 
 	if !jogoIniciado {
 		*w4.DRAW_COLORS = 4
-		w4.Text("Controles:", 10, 40)
-		w4.Text("< > para mover", 10, 55)
-		w4.Text("^ para atirar", 10, 70)
+		w4.Text("Space Comunixt", 10, 20)
+		w4.Text("Controls:", 10, 40)
+		w4.Text("\x84 \x85 to move", 10, 55)
+		w4.Text("\x86 to shoot", 10, 70)
 		*w4.DRAW_COLORS = 2
-		w4.Text("Pressione X \npara jogar!", 35, 90)
+		w4.Text("Press X to\nstart playing!", 35, 90)
 		if gamepad&w4.BUTTON_1 != 0 {
 			jogoIniciado = true
 		}
@@ -99,7 +103,7 @@ func update() {
 		}
 	}
 
-	for i := 0; i < 3; i++ {
+	for i := 0; i < len(viloes); i++ {
 		if !viloes[i].vivo {
 			continue
 		}
@@ -119,7 +123,7 @@ func update() {
 	}
 
 	for i := 0; i < len(tiros); i++ {
-		for j := 0; j < 3; j++ {
+		for j := 0; j < len(viloes); j++ {
 			if viloes[j].vivo && tiros[i].vivo {
 				if colisao(tiros[i].x, tiros[i].y, 2, 2, viloes[j].x, viloes[j].y, vilao.width, vilao.height) {
 					tiros[i].vivo = false
@@ -132,12 +136,12 @@ func update() {
 		}
 	}
 
-	for i := 0; i < 3; i++ {
+	for i := 0; i < len(viloes); i++ {
 		if viloes[i].vivo && viloes[i].y >= naveY {
 			*w4.DRAW_COLORS = 2
-			w4.Text("Que pena!\no espaco e\ncomunista!", 30, 59)
+			w4.Text("Too bad!\nspace is\ncommunist!", 30, 59)
 			*w4.DRAW_COLORS = 4
-			w4.Text("Pressione R para\ntentar de novo!", 25, 95)
+			w4.Text("Press R to\ntry again!", 25, 95)
 			return
 		}
 	}
@@ -149,19 +153,18 @@ func tela() {
 	*w4.DRAW_COLORS = 0x0002
 	w4.Blit(&nave.sprite[0], naveX, naveY, 8, 8, w4.BLIT_2BPP)
 
-	for i := 0; i < 3; i++ {
-			if viloes[i].vivo {
-				*w4.DRAW_COLORS = 0x234
-				w4.Blit(&vilao.sprite[0], viloes[i].x, viloes[i].y, 8, 8, w4.BLIT_2BPP)
+	for i := 0; i < len(viloes); i++ {
+		if viloes[i].vivo {
+			*w4.DRAW_COLORS = 0x234
+			w4.Blit(&vilao.sprite[0], viloes[i].x, viloes[i].y, 8, 8, w4.BLIT_2BPP)
+			*w4.DRAW_COLORS = 3
+			w4.Rect(viloes[i].x-1, viloes[i].y+9, 9, 1)
 
-				*w4.DRAW_COLORS = 3
-				w4.Rect(viloes[i].x, viloes[i].y+9, 9, 2)
-
-				vidaWidth := viloes[i].vida * 3
-				*w4.DRAW_COLORS = 2
-				w4.Rect(viloes[i].x, viloes[i].y+9, uint(vidaWidth), 2)
-			}
+			vidaWidth := viloes[i].vida * 3
+			*w4.DRAW_COLORS = 2
+			w4.Rect(viloes[i].x-1, viloes[i].y+9, uint(vidaWidth), 1)
 		}
+	}
 
 	*w4.DRAW_COLORS = 4
 	for i := 0; i < len(tiros); i++ {
@@ -171,7 +174,7 @@ func tela() {
 	}
 
 	vitoria := true
-	for i := 0; i < 3; i++ {
+	for i := 0; i < len(viloes); i++ {
 		if viloes[i].vivo {
 			vitoria = false
 			break
@@ -179,9 +182,9 @@ func tela() {
 	}
 	if vitoria {
 		*w4.DRAW_COLORS = 2
-		w4.Text("Parabens voce\n democratizou\n   o espaco!", 30, 59)
+		w4.Text("Congrats, you\ndemocratized\n  the space!", 30, 59)
 		*w4.DRAW_COLORS = 4
-		w4.Text("Pressione R para\ntentar de novo!", 25, 95)
+		w4.Text("Press R to\ntry again!", 25, 95)
 	}
 }
 
