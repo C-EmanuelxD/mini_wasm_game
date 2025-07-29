@@ -62,7 +62,7 @@ func update() {
 
 	if !jogoIniciado {
 		*w4.DRAW_COLORS = 4
-		w4.Text("Space Comunixt", 10, 20)
+		w4.Text("Space Republic", 10, 20)
 		w4.Text("Controls:", 10, 40)
 		w4.Text("\x84 \x85 to move", 10, 55)
 		w4.Text("\x86 to shoot", 10, 70)
